@@ -4,6 +4,7 @@ import com.example.Ecommerce.Models.Item;
 import com.example.Ecommerce.Models.User;
 import com.example.Ecommerce.Repositories.ItemRepository;
 import com.example.Ecommerce.Repositories.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,10 +37,23 @@ public class UserController {
         user.setLastname(userDetails.getLastname());
         user.setEmail(userDetails.getEmail());
         user.setPassword(userDetails.getPassword());
-        user.setRole(userDetails.getRole());
+        user.setAuthority(userDetails.getAuthority());
         userRepository.save(user);
 
     }
+
+    @PostMapping("/register")
+    public void createAdmin(@RequestBody AdminController.CreateUserRequest request) {
+        User admin = new User();
+        admin.setFirstname(request.firstname());
+        admin.setEmail(request.email());
+        admin.setLastname(request.lastname());
+        admin.setPassword(new BCryptPasswordEncoder().encode(request.password()));
+        admin.setAuthority("USER");
+        userRepository.save(admin);
+    }
+
+
     @GetMapping
     public List<Item> getAllItems() {
         return itemRepository.findAll();

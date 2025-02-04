@@ -16,19 +16,19 @@ public class AdminController {
     public AdminController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    record CreateUserRequest(String firstname, String lastname, String email, String password, String role){}
+    record CreateUserRequest(String firstname, String lastname, String email, String password, String authority){}
 
     // Retrieve all admins
     @GetMapping("/admins")
     public List<User> getAllAdmins() {
-        return userRepository.findByRole("ADMIN");
+        return userRepository.findByAuthority("ADMIN");
     }
 
     // Retrieve a specific admin by ID
     @GetMapping("/admins/{id}")
     public User getAdminById(@PathVariable Integer id) {
         User admin = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Admin not found"));
-        if (!"ADMIN".equals(admin.getRole())) {
+        if (!"ADMIN".equals(admin.getAuthority())) {
             throw new RuntimeException("User is not an admin");
         }
         return admin;
@@ -42,7 +42,7 @@ admin.setFirstname(request.firstname());
         admin.setEmail(request.email());
         admin.setLastname(request.lastname());
         admin.setPassword(new BCryptPasswordEncoder().encode(request.password()));
-        admin.setRole("ADMIN");
+        admin.setAuthority("ADMIN");
         userRepository.save(admin);
     }
 
@@ -50,7 +50,7 @@ admin.setFirstname(request.firstname());
     @PutMapping("/admins/{id}")
     public void updateAdmin(@PathVariable Integer id, @RequestBody User adminDetails) {
         User admin = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Admin not found"));
-        if (!"ADMIN".equals(admin.getRole())) {
+        if (!"ADMIN".equals(admin.getAuthority())) {
             throw new RuntimeException("User is not an admin");
         }
         admin.setFirstname(adminDetails.getFirstname());
@@ -62,7 +62,7 @@ admin.setFirstname(request.firstname());
     @DeleteMapping("/admins/{id}")
     public void deleteAdmin(@PathVariable Integer id) {
         User admin = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Admin not found"));
-        if (!"ADMIN".equals(admin.getRole())) {
+        if (!"ADMIN".equals(admin.getAuthority())) {
             throw new RuntimeException("User is not an admin");
         }
         userRepository.deleteById(id);

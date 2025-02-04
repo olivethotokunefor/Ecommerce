@@ -28,7 +28,7 @@ public class Tcontroller {
         admin.setEmail(request.email());
         admin.setLastname(request.lastname());
         admin.setPassword(new BCryptPasswordEncoder().encode(request.password()));
-        admin.setRole("ADMIN");
+        admin.setAuthority("ADMIN");
         userRepository.save(admin);
     }
 }

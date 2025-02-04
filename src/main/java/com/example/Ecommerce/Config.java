@@ -38,9 +38,9 @@ public class Config {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        //.requestMatchers("/admin/**").hasAuthority("admin") // Admin routes
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN") // Admin routes
 //                        .requestMatchers("/items/").hasAuthority("admin") // Items routes
-//                        .requestMatchers("/users/**").hasAuthority("user") // Users routes
+                        .requestMatchers("/users/**").hasAuthority("USER") // Users routes
 //                        .requestMatchers("/Taskapp/userhome").hasAuthority("user") // User home route
                         .anyRequest().permitAll()
                 )

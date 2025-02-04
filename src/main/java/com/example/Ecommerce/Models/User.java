@@ -1,13 +1,18 @@
 package com.example.Ecommerce.Models;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
-public class User {
+public class User implements UserDetails {
     @Id
     @SequenceGenerator(
             name = "user_sequence",
-            sequenceName =  "user_id_sequence",
+            sequenceName = "user_id_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
@@ -21,30 +26,35 @@ public class User {
     private String password;
     private String email;
 
-    private String role;
+    private String authority;
 
 
     public User() {
     }
 
-    public User(String firstname, String lastname, String password, String email, String role) {
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return "";
+    }
+
+    @Override
+    public String getUsername() {
+        return "";
+    }
+
+    public User(String firstname, String lastname, String password, String email, String authority) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.password = password;
         this.email = email;
-
-        this.role=role;
+        this.authority = authority;
     }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-
 
     public int getId() {
         return id;
@@ -70,10 +80,6 @@ public class User {
         this.lastname = lastname;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -84,5 +90,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
     }
 }
